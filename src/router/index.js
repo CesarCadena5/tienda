@@ -1,3 +1,4 @@
+import isAuthenticatedGuard from '@/modules/auth/guards/isAuthenticatedGuard';
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
@@ -22,7 +23,12 @@ const routes = [
       }
     ]
   },
-  ,
+  {
+    path: '/home',
+    name: 'home',
+    beforeEnter: [isAuthenticatedGuard],
+    component: () => import("@/modules/shared/pages/Home.vue")
+  },
   {
     path: '/:pathMatch(.*)*',
     component: () => import("@/modules/shared/pages/404.vue")

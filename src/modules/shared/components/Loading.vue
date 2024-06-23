@@ -1,31 +1,27 @@
 <template>
+  <div class="position-absolute z-1 bg-primary bg-opacity-25 min-vh-100 min-w-100 d-flex align-items-center justify-content-center">
     <span class="loader"></span>
+  </div>
 </template>
 <style scoped>
+
 .loader {
   width: 48px;
   height: 48px;
+  border: 5px solid;
+  border-color: white transparent;
   border-radius: 50%;
   display: inline-block;
-  position: relative;
-  background: linear-gradient(0deg, rgba(255, 61, 0, 0.2) 33%, rgb(13, 110, 253) 100%);
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-.loader::after {
-  content: '';  
-  box-sizing: border-box;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #263238;
-}
+
 @keyframes rotation {
-  0% { transform: rotate(0deg) }
-  100% { transform: rotate(360deg)}
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 } 
 </style>
