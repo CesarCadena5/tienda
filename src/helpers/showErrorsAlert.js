@@ -1,14 +1,19 @@
 import Swal from 'sweetalert2';
 
-export const showErrorsAlert = (errors) => {
-    let errorsMsg = '<ul>';
-    errors.map(({ msg }) => {
-        errorsMsg += `<li>${msg}</li>`;
-    });
-    errorsMsg += '</ul>'
-    Swal.fire({
-        icon: 'error',
-        title: "Errores de Validación",
-        html: errorsMsg
+export const showErrorsAlert = (icon, router = null, title = '', errors = [], route = '') => {
+    const errorMsg = errors.length > 0 ?
+        `<ul>${errors.reduce((msg, { msg: errorMsg }) => `${msg}<li>${errorMsg}</li>`, '')}</ul>` : '';
+
+    const configSwal = {
+        icon,
+        html: errorMsg,
+        title,
+        allowOutsideClick: icon === 'success' ? false : true,
+    };
+
+    Swal.fire(configSwal).then((result) => {
+        if (icon === 'success' && result.isConfirmed) {
+            router.replace({ name: route });
+        }
     });
 }

@@ -42,14 +42,48 @@ const routes = [
         component: () => import("@/modules/products/layouts/ProductLayout.vue"),
         children: [
           {
+            path: '',
+            name: 'redirect-products',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-product' }
+          },
+          {
             path: 'create',
             name: 'create-product',
+            beforeEnter: [isAuthenticatedGuard],
             component: () => import("@/modules/products/pages/CreateProduct.vue")
           },
           {
             path: 'list',
             name: 'list-product',
+            beforeEnter: [isAuthenticatedGuard],
             component: () => import("@/modules/products/pages/ListProduct.vue")
+          }
+        ]
+      },
+      {
+        path: 'categories',
+        name: 'categories',
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/categories/layouts/CategoryLayout.vue"),
+        children: [
+          {
+            path: '',
+            name: 'redirect-category',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-category' }
+          },
+          {
+            path: 'create',
+            name: 'create-category',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/categories/pages/CreateCategory.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-category',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/categories/pages/ListCategory.vue")
           }
         ]
       }

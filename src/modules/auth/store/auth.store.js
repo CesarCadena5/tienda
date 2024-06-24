@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getDataApi } from "@/helpers/getDataApi";
 import { showErrorsAlert } from "@/helpers/showErrorsAlert";
+import { useRouter } from "vue-router";
 
 export const useAuthStore = defineStore('auth', () => {
     const statusAuth = ref(false);
@@ -9,6 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const msgAuth = ref('');
     const loading = ref(false);
     const isValidToken = ref(false);
+    const router = useRouter();
 
     const setLoading = (value) => {
         loading.value = value;
@@ -39,7 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
         const { msg, error, errors, userName } = await responseLogin.json();
 
         if (errors && errors.length > 0) {
-            showErrorsAlert(errors);
+            showErrorsAlert(errors, null, 'Errores de validación', errors);
             setLoading(false);
             return;
         }

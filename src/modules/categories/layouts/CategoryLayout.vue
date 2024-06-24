@@ -9,11 +9,11 @@
 import Navbar from '@/modules/shared/components/Navbar.vue';
 const routes = [
     {
-        path: 'create-product',
+        path: 'create-category',
         name: 'Crear'
     }, 
     {
-        path: 'list-product',
+        path: 'list-category',
         name: 'Listar'
     }
 ];

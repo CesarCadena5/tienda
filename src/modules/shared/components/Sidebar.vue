@@ -17,7 +17,7 @@
                         </router-link>
                     </li>
                     <li class="list-group-item list-group-item-action list-group-item-info">
-                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                        <router-link :to="{name: 'list-category'}" class="d-flex align-items-center gap-2">
                             <img src="@/assets/svgs/category.svg" alt="Icon Categories" class="icon-height">
                             Categorías
                         </router-link>
