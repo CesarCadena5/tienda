@@ -5,7 +5,6 @@ const isAuthenticatedGuard = async (to, from, next) => {
     await authStore.validateAuthUser();
 
     if (!authStore.isValidToken && !authStore.statusAuth) {
-        console.log('aqui')
         return next({
             name: 'login'
         });

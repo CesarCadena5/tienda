@@ -1,6 +1,6 @@
 <template>
     <div class="row align-items-center justify-content-around min-vh-100 px-2">
-        <Loading v-if="authStore.Loading"/>
+        <Loading v-if="authStore.loading"/>
         <div class="col-12 col-lg-6 d-lg-block d-none">
             <img :src="imgSrc" alt="Image login" class="img-fluid p-2">
         </div>
@@ -12,7 +12,12 @@
                     <img :src="imgAvatarSrc" class="img-fluid height-avatar" alt="Svg Auth">
                     <h4>{{ msgAuth }}</h4>
                 </div>
-                <slot name="input-register"/>
+                <!-- <slot name="input-register"/> -->
+                <div class="mb-3" v-if="title !== 'Login'">
+                    <label for="exampleInputName" class="form-label">Nombre</label>
+                    <input type="text" @input="handleChangeName" class="form-control" id="exampleInputName" aria-describedby="nameHelp">
+                    <div id="nameHelp" class="form-text" v-if="showMsgNameError">El nombre es requerido</div>
+                </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Correo</label>
                     <input type="email" @input="handleChangeEmail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">

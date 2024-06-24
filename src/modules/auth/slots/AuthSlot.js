@@ -43,7 +43,18 @@ export default defineComponent({
         });
 
         const enableButtomSubmit = computed(() => {
-            if (regexEmail.test(email.value) && regexPassword.test(password.value)) {
+            if (
+                (
+                    props.title !== 'Login' &&
+                    name.value.length > 4 &&
+                    regexEmail.test(email.value) && regexPassword.test(password.value)
+                ) ||
+                (
+                    props.title === 'Login' &&
+                    regexEmail.test(email.value) &&
+                    regexPassword.test(password.value)
+                )
+            ) {
                 return true;
             }
 
@@ -52,16 +63,17 @@ export default defineComponent({
 
         // methods
         const handleAuth = async () => {
-            if (enableButtomSubmit && props.title === 'Login') {
-                await authStore.login(email.value, password.value);
+            if (enableButtomSubmit) {
+                await authStore.loginOrSignup(email.value, password.value, name.value);
                 if (authStore.statusAuth) {
-                    console.log('entra')
                     router.replace({ name: 'home' });
                 }
-            } else {
-
             }
         }
+
+        const handleChangeName = ({ target }) => {
+            validateFields(target.value.length < 4, name, showMsgNameError, target.value);
+        };
 
         const handleChangeEmail = ({ target }) => {
             validateFields(!regexEmail.test(target.value), email, showMsgEmailError, target.value);
@@ -94,6 +106,7 @@ export default defineComponent({
 
             // methods
             handleAuth,
+            handleChangeName,
             handleChangeEmail,
             handleChangePassword,
 

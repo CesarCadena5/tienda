@@ -1,10 +1,11 @@
-import { getDataApi } from "@/helpers/getDataApi";
-import { defineStore } from "pinia";
 import { ref } from "vue";
+import { defineStore } from "pinia";
+import { getDataApi } from "@/helpers/getDataApi";
+import { showErrorsAlert } from "@/helpers/showErrorsAlert";
 
 export const useAuthStore = defineStore('auth', () => {
     const statusAuth = ref(false);
-    const iconAuth = ref('');
+    const nameUser = ref(false);
     const msgAuth = ref('');
     const loading = ref(false);
     const isValidToken = ref(false);
@@ -17,32 +18,40 @@ export const useAuthStore = defineStore('auth', () => {
         msgAuth.value = value;
     };
 
-    const setValidToken = (value) => {
-        isValidToken.value = value;
+    const setNameUser = (value) => {
+        nameUser.value = value;
     };
 
-    const setIconAuth = (value) => {
-        iconAuth.value = value;
+    const setValidToken = (value) => {
+        isValidToken.value = value;
     };
 
     const setStatusAuth = (value) => {
         statusAuth.value = value;
     }
 
-    const login = async (email, password) => {
+    const loginOrSignup = async (email, password, name = '') => {
         setLoading(true);
-        const data = { email, password };
+        const data = { email, password, name };
+        const urlPath = name === '' ? 'auth/login' : 'auth/register'
 
-        const responseLogin = await getDataApi('auth/login', data);
-        const { icon, msg, error } = await responseLogin.json();
+        const responseLogin = await getDataApi(urlPath, data);
+        const { msg, error, errors, userName } = await responseLogin.json();
+
+        if (errors && errors.length > 0) {
+            showErrorsAlert(errors);
+            setLoading(false);
+            return;
+        }
+
         if (!responseLogin.ok) {
             setMsgAuth(error);
             setLoading(false);
             return;
         }
 
+        setNameUser(userName);
         setStatusAuth(true);
-        setIconAuth(icon);
         setMsgAuth(msg);
         setLoading(false);
     };
@@ -65,12 +74,12 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         statusAuth,
         loading,
-        iconAuth,
+        nameUser,
         msgAuth,
         isValidToken,
 
         // methods
-        login,
+        loginOrSignup,
         validateAuthUser
     }
 });
