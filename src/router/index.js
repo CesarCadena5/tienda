@@ -30,6 +30,32 @@ const routes = [
     component: () => import("@/modules/shared/pages/Home.vue")
   },
   {
+    path: '/store',
+    name: 'store',
+    beforeEnter: [isAuthenticatedGuard],
+    component: () => import("@/modules/shared/layouts/StoreLayout.vue"),
+    children: [
+      {
+        path: 'products',
+        name: 'products',
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/products/layouts/ProductLayout.vue"),
+        children: [
+          {
+            path: 'create',
+            name: 'create-product',
+            component: () => import("@/modules/products/pages/CreateProduct.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-product',
+            component: () => import("@/modules/products/pages/ListProduct.vue")
+          }
+        ]
+      }
+    ]
+  },
+  {
     path: '/:pathMatch(.*)*',
     component: () => import("@/modules/shared/pages/404.vue")
   }

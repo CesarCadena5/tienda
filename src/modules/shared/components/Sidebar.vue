@@ -1,32 +1,99 @@
 <template>
     <aside>
-        <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-            <img src="@/assets/svgs/menu.svg" alt="Icon Menu">
-        </a>
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-            Button with data-bs-target
-        </button>
-
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header d-flex justify-content-between">
+                <h5 class="offcanvas-title d-flex align-items-center gap-1" id="offcanvasExampleLabel">
+                    {{ authStore.nameUser.toUpperCase() }}
+                    <img src="@/assets/svgs/store-icon.svg" alt="Icon Store" class="icon-height">
+                </h5>
+                <img src="@/assets/svgs/close-menu.svg" alt="Icon Close Menu" data-bs-dismiss="offcanvas" aria-label="Close" class="icon-close">
             </div>
-            <div class="offcanvas-body">
-                <div>
-                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+            <div class="offcanvas-body d-flex flex-column justify-content-between">
+                <div class="list-group mt-2">
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'list-product'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/product-icon.svg" alt="Icon Products" class="icon-height">
+                            Productos
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/category.svg" alt="Icon Categories" class="icon-height">
+                            Categorías
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/sale.svg" alt="Icon Sales" class="icon-height">
+                            Ventas
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/orders.svg" alt="Icon Orders" class="icon-height">
+                            Pedidos
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/supplier.svg" alt="Icon Supplier" class="icon-height">
+                            Proveedores
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/customer.svg" alt="Icon Customer" class="icon-height">
+                            Clientes
+                        </router-link>
+                    </li>
                 </div>
-                <div class="dropdown mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Dropdown button
+
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Perfil
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li>
+                            <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <img src="@/assets/svgs/user-edit.svg" alt="User Edit" class="icon-height">
+                                Actualizar
+                            </router-link>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2 dropdown-item">
+                                <img src="@/assets/svgs/logout-icon.svg" alt="Icon logout" class="icon-height">
+                                Salir
+                            </router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </aside>
 </template>
+
+<script setup>
+import { useAuthStore } from '@/modules/auth/store/auth.store';
+
+const authStore = useAuthStore();
+</script>
+
+<style scoped>
+.icon-close {
+    height: 45px;
+    cursor: pointer;
+}
+
+.icon-height {
+    height: 20px;
+}
+
+.offcanvas {
+    width: 260px;
+}
+
+a{
+    text-decoration: none;
+}
+</style>

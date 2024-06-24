@@ -5,7 +5,7 @@ import { showErrorsAlert } from "@/helpers/showErrorsAlert";
 
 export const useAuthStore = defineStore('auth', () => {
     const statusAuth = ref(false);
-    const nameUser = ref(false);
+    const nameUser = ref('');
     const msgAuth = ref('');
     const loading = ref(false);
     const isValidToken = ref(false);
@@ -59,11 +59,12 @@ export const useAuthStore = defineStore('auth', () => {
     const validateAuthUser = async () => {
         setLoading(true);
         const responseValidate = await getDataApi('auth/validate-token', {}, 'GET');
-        const { tokenValid } = await responseValidate.json();
+        const { tokenValid, nameUser } = await responseValidate.json();
 
         if (tokenValid) {
             setValidToken(true);
             setStatusAuth(true);
+            setNameUser(nameUser);
         } else {
             setValidToken(false);
             setStatusAuth(false);
