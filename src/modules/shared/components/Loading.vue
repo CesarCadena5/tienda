@@ -1,9 +1,12 @@
 <template>
-  <div class="position-absolute z-1 bg-primary bg-opacity-25 min-vh-100 min-w-100 d-flex align-items-center justify-content-center">
+  <div class="position-absolute z-1 bg-primary bg-opacity-25 h-93 min-w-100 d-flex align-items-center justify-content-center">
     <span class="loader"></span>
   </div>
 </template>
 <style scoped>
+.h-93 {
+  min-height: 93vh;
+}
 
 .loader {
   width: 48px;

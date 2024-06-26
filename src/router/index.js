@@ -84,6 +84,13 @@ const routes = [
             name: 'list-category',
             beforeEnter: [isAuthenticatedGuard],
             component: () => import("@/modules/categories/pages/ListCategory.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-category',
+            props: true,
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/categories/pages/EditCategory.vue")
           }
         ]
       }
