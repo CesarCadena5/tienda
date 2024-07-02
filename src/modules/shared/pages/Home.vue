@@ -28,10 +28,13 @@
                     </span>
                 </div>
                 <div class="alert alert-danger w-45 position-relative" role="alert">
-                    <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                    <router-link :to="{name: 'list-customer'}" class="d-flex align-items-center gap-2">
                         <img src="@/assets/svgs/customer.svg" alt="Icon Customer" class="icon-height">
                         Clientes
                     </router-link>
+                    <span class="position-absolute top-0 start-100 bg-info translate-middle badge rounded-pill bg-danger">
+                        {{customersStore.totalDocs}}
+                    </span>
                 </div>
                 <div class="alert alert-dark w-45 position-relative" role="alert">
                     <router-link :to="{name: 'list-product'}" class="d-flex align-items-center gap-2">
@@ -61,13 +64,17 @@ import { onMounted } from 'vue';
 import { useAuthStore } from '@/modules/auth/store/auth.store';
 import { useCategoriesStore } from '../../categories/store/categories.store';
 import { useSupplierStore } from '@/modules/suppliers/store/suppliers.store';
+import { useCustomerStore } from '@/modules/customers/store/customers.store';
 
 const authStore = useAuthStore();
 const categoriesStore = useCategoriesStore();
 const suppliersStore = useSupplierStore();
+const customersStore = useCustomerStore();
 
 onMounted(() => {
     categoriesStore.listCategory();
+    suppliersStore.listSupplier();
+    customersStore.listCustomer();
 });
 </script>
 

@@ -126,6 +126,39 @@ const routes = [
             component: () => import("@/modules/suppliers/pages/EditSupplier.vue")
           }
         ]
+      },
+      {
+        path: 'customers',
+        name: 'customers',
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/customers/layouts/CustomerLayout.vue"),
+        children: [
+          {
+            path: '',
+            name: 'redirect-customer',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-customer' }
+          },
+          {
+            path: 'create',
+            name: 'create-customer',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/customers/pages/CreateCustomer.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-customer',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/customers/pages/ListCustomer.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-customer',
+            props: true,
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/customers/pages/EditCustomer.vue")
+          }
+        ]
       }
     ]
   },
