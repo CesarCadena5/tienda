@@ -25,7 +25,6 @@ const props = defineProps({
 
 const categoriesStore = useCategoriesStore();
 
-const nameCategory = ref('');
 const btnDisabled = computed(() => categoriesStore.category.name.length < 4);
 
 const handleSubmit = () => {

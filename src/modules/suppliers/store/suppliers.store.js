@@ -1,19 +1,20 @@
-import { ref, computed } from "vue";
-import { defineStore } from "pinia";
-import { useRouter } from "vue-router";
 import { getDataApi } from "@/helpers/getDataApi";
 import { showErrorsAlert } from "@/helpers/showErrorsAlert";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 
-export const useCategoriesStore = defineStore('categories', () => {
+export const useSupplierStore = defineStore('supplier', () => {
     const router = useRouter();
-    const categories = ref([]);
-    const category = ref({
+    const suppliers = ref([]);
+    const supplier = ref({
         _id: null,
-        name: ''
+        name: '',
+        phoneNumber: ''
     });
     const loading = ref(false);
     const searchTerm = ref('');
-    const pathUrlModule = 'category';
+    const pathUrlModule = 'supplier';
 
     // pagination
     const nextPage = ref(null);
@@ -25,12 +26,12 @@ export const useCategoriesStore = defineStore('categories', () => {
         loading.value = value;
     }
 
-    const setCategories = (value) => {
-        categories.value = value;
+    const setSuppliers = (value) => {
+        suppliers.value = value;
     }
 
-    const setCategory = (value) => {
-        category.value = value;
+    const setSupplier = (value) => {
+        supplier.value = value;
     }
 
     const setSearchTerm = (value) => {
@@ -54,15 +55,16 @@ export const useCategoriesStore = defineStore('categories', () => {
         prevPage.value = value;
     }
 
-    const hasCategories = computed(() => categories.value.length > 0);
+    const hasSuppliers = computed(() => suppliers.value.length > 0);
 
-    const createOrUpdateCategory = async () => {
+    // methods
+    const createOrUpdateSupplier = async (values) => {
         setLoading(true);
-        const data = { name: category.value.name };
-        const finishPath = !category.value._id ? '/create' : `/${category.value._id}`;
-        const method = !category.value._id ? 'POST' : 'PUT';
 
-        const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, data, method);
+        const finishPath = !supplier.value._id ? '/create' : `/${supplier.value._id}`;
+        const method = !supplier.value._id ? 'POST' : 'PUT';
+
+        const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, values, method);
         const { icon: iconResponse, errors, msg, error } = await responseCreate.json();
 
         setLoading(false);
@@ -74,10 +76,10 @@ export const useCategoriesStore = defineStore('categories', () => {
             return;
         }
 
-        showErrorsAlert(iconResponse, router, msg, [], 'list-category');
+        showErrorsAlert(iconResponse, router, msg, [], 'list-supplier');
     };
 
-    const listCategory = async (page = 1, limit = 5) => {
+    const listSupplier = async (page = 1, limit = 5) => {
         setLoading(true);
         const urlPath = `${pathUrlModule}/list?page=${page}&limit=${limit}&search=${searchTerm.value}`;
 
@@ -91,10 +93,9 @@ export const useCategoriesStore = defineStore('categories', () => {
             return;
         }
 
-        setCategory({ _id: null, name: '' });
+        setSupplier({ _id: null, name: '', phoneNumber: '' });
 
-        // showErrorsAlert(iconResponse, null, msg, [], '', true);
-        setCategories(data.docs);
+        setSuppliers(data.docs);
         setTotalPages(data.totalPages);
         setTotalDocs(data.totalDocs);
         setPrevPage(data.prevPage);
@@ -102,26 +103,26 @@ export const useCategoriesStore = defineStore('categories', () => {
         setLoading(false);
     };
 
-    const getCategory = async (id) => {
+    const getSupplier = async (id) => {
         setLoading(true);
-        const responseGetCategory = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
-        const { icon: iconResponse, errors, msg, data } = await responseGetCategory.json();
+        const responseGetSupplier = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
+        const { icon: iconResponse, errors, msg, data } = await responseGetSupplier.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
-            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-category');
+            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-supplier');
             return;
         }
 
+        setSupplier(data);
         showErrorsAlert(iconResponse, null, msg, [], '', true);
-        setCategory(data);
         setLoading(false);
     };
 
-    const deleteCategory = async (id) => {
+    const deleteSupplier = async (id) => {
         setLoading(true);
-        const responseDeleteCategory = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
-        const { icon: iconResponse, errors, msg } = await responseDeleteCategory.json();
+        const responseDeleteSupplier = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
+        const { icon: iconResponse, errors } = await responseDeleteSupplier.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
@@ -130,14 +131,14 @@ export const useCategoriesStore = defineStore('categories', () => {
         }
 
         setLoading(false);
-        listCategory();
+        listSupplier();
     };
 
     return {
-        categories,
-        category,
+        suppliers,
+        supplier,
         loading,
-        hasCategories,
+        hasSuppliers,
         totalDocs,
         setSearchTerm,
 
@@ -145,9 +146,9 @@ export const useCategoriesStore = defineStore('categories', () => {
         prevPage,
         nextPage,
 
-        createOrUpdateCategory,
-        listCategory,
-        getCategory,
-        deleteCategory
+        createOrUpdateSupplier,
+        listSupplier,
+        deleteSupplier,
+        getSupplier
     }
 });

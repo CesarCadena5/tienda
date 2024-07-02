@@ -93,6 +93,39 @@ const routes = [
             component: () => import("@/modules/categories/pages/EditCategory.vue")
           }
         ]
+      },
+      {
+        path: 'suppliers',
+        name: 'suppliers',
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/suppliers/layouts/SupplierLayout.vue"),
+        children: [
+          {
+            path: '',
+            name: 'redirect-supplier',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-supplier' }
+          },
+          {
+            path: 'create',
+            name: 'create-supplier',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/suppliers/pages/CreateSupplier.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-supplier',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/suppliers/pages/ListSupplier.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-supplier',
+            props: true,
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/suppliers/pages/EditSupplier.vue")
+          }
+        ]
       }
     ]
   },

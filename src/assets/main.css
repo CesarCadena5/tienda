@@ -5,3 +5,7 @@
 .row {
     margin: 0 !important;
 }
+
+.height-icon {
+    height: 25px;
+}

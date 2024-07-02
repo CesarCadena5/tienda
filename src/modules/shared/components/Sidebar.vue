@@ -35,7 +35,7 @@
                         </router-link>
                     </li>
                     <li class="list-group-item list-group-item-action list-group-item-info">
-                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                        <router-link :to="{name: 'list-supplier'}" class="d-flex align-items-center gap-2">
                             <img src="@/assets/svgs/supplier.svg" alt="Icon Supplier" class="icon-height">
                             Proveedores
                         </router-link>
@@ -44,6 +44,12 @@
                         <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
                             <img src="@/assets/svgs/customer.svg" alt="Icon Customer" class="icon-height">
                             Clientes
+                        </router-link>
+                    </li>
+                    <li class="list-group-item list-group-item-action list-group-item-info">
+                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                            <img src="@/assets/svgs/home.svg" alt="Icon Home" class="icon-height">
+                            Inicio
                         </router-link>
                     </li>
                 </div>
