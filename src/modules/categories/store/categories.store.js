@@ -55,6 +55,15 @@ export const useCategoriesStore = defineStore('categories', () => {
     }
 
     const hasCategories = computed(() => categories.value.length > 0);
+    const inputValuesSelect = computed(() => {
+        const options = categories.value.map(category => ({
+            value: category._id,
+            text: category.name
+        }));
+
+        options.unshift({ value: '', text: 'Selecciona' });
+        return options;
+    });
 
     const createOrUpdateCategory = async () => {
         setLoading(true);
@@ -140,6 +149,7 @@ export const useCategoriesStore = defineStore('categories', () => {
         hasCategories,
         totalDocs,
         setSearchTerm,
+        inputValuesSelect,
 
         totalPages,
         prevPage,

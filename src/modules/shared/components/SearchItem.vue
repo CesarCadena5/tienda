@@ -1,6 +1,6 @@
 <template>
     <div class="input-group mb-3">
-        <input type="text" v-model="searchTerm" class="form-control" placeholder="Lácteos, Bebidas..." aria-label="Lácteos, Bebidas..." aria-describedby="button-addon2">
+        <input type="text" v-model="searchTerm" class="form-control" placeholder="Buscar" aria-label="Lácteos, Bebidas..." aria-describedby="button-addon2">
         <button class="btn btn-outline-info" disabled type="button" id="button-addon2">
             <img src="@/assets/svgs/search-icon.svg" alt="Icon Search" class="height-icon">
         </button>

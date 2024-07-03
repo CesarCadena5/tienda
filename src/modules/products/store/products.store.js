@@ -4,17 +4,22 @@ import { useRouter } from "vue-router";
 import { getDataApi } from "@/helpers/getDataApi";
 import { showErrorsAlert } from "@/helpers/showErrorsAlert";
 
-export const useSupplierStore = defineStore('supplier', () => {
+export const useProductStore = defineStore('products', () => {
     const router = useRouter();
-    const suppliers = ref([]);
-    const supplier = ref({
+    const products = ref([]);
+    const product = ref({
         _id: null,
         name: '',
-        phoneNumber: ''
+        description: '',
+        purchasePrice: '',
+        salePrice: '',
+        stock: '',
+        category: {},
+        supplier: {}
     });
     const loading = ref(false);
     const searchTerm = ref('');
-    const pathUrlModule = 'supplier';
+    const pathUrlModule = 'product';
 
     // pagination
     const nextPage = ref(null);
@@ -26,12 +31,12 @@ export const useSupplierStore = defineStore('supplier', () => {
         loading.value = value;
     }
 
-    const setSuppliers = (value) => {
-        suppliers.value = value;
+    const setProducts = (value) => {
+        products.value = value;
     }
 
-    const setSupplier = (value) => {
-        supplier.value = value;
+    const setProduct = (value) => {
+        product.value = value;
     }
 
     const setSearchTerm = (value) => {
@@ -55,23 +60,14 @@ export const useSupplierStore = defineStore('supplier', () => {
         prevPage.value = value;
     }
 
-    const hasSuppliers = computed(() => suppliers.value.length > 0);
-    const inputValuesSelect = computed(() => {
-        const options = suppliers.value.map(supplier => ({
-            value: supplier._id,
-            text: supplier.name
-        }));
-
-        options.unshift({ value: '', text: 'Selecciona' });
-        return options;
-    });
+    const hasProducts = computed(() => products.value.length > 0);
 
     // methods
-    const createOrUpdateSupplier = async (values) => {
+    const createOrUpdateProduct = async (values) => {
         setLoading(true);
 
-        const finishPath = !supplier.value._id ? '/create' : `/${supplier.value._id}`;
-        const method = !supplier.value._id ? 'POST' : 'PUT';
+        const finishPath = !product.value._id ? '/create' : `/${product.value._id}`;
+        const method = !product.value._id ? 'POST' : 'PUT';
 
         const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, values, method);
         const { icon: iconResponse, errors, msg, error } = await responseCreate.json();
@@ -85,10 +81,10 @@ export const useSupplierStore = defineStore('supplier', () => {
             return;
         }
 
-        showErrorsAlert(iconResponse, router, msg, [], 'list-supplier');
+        showErrorsAlert(iconResponse, router, msg, [], 'list-product');
     };
 
-    const listSupplier = async (page = 1, limit = 5) => {
+    const listProduct = async (page = 1, limit = 5) => {
         setLoading(true);
         const urlPath = `${pathUrlModule}/list?page=${page}&limit=${limit}&search=${searchTerm.value}`;
 
@@ -98,13 +94,13 @@ export const useSupplierStore = defineStore('supplier', () => {
         if (error) {
             setLoading(false);
             showErrorsAlert(iconResponse, null, error);
-            setSuppliers([]);
+            setProducts([]);
             return;
         }
 
-        setSupplier({ _id: null, name: '', phoneNumber: '' });
+        setProduct({ _id: null, name: '' });
 
-        setSuppliers(data.docs);
+        setProducts(data.docs);
         setTotalPages(data.totalPages);
         setTotalDocs(data.totalDocs);
         setPrevPage(data.prevPage);
@@ -112,26 +108,26 @@ export const useSupplierStore = defineStore('supplier', () => {
         setLoading(false);
     };
 
-    const getSupplier = async (id) => {
+    const getProduct = async (id) => {
         setLoading(true);
-        const responseGetSupplier = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
-        const { icon: iconResponse, errors, msg, data } = await responseGetSupplier.json();
+        const responseGetProduct = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
+        const { icon: iconResponse, errors, msg, data } = await responseGetProduct.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
-            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-supplier');
+            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-product');
             return;
         }
 
-        setSupplier(data);
+        setProduct(data);
         showErrorsAlert(iconResponse, null, msg, [], '', true);
         setLoading(false);
     };
 
-    const deleteSupplier = async (id) => {
+    const deleteProduct = async (id) => {
         setLoading(true);
-        const responseDeleteSupplier = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
-        const { icon: iconResponse, errors } = await responseDeleteSupplier.json();
+        const responseDeleteProduct = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
+        const { icon: iconResponse, errors } = await responseDeleteProduct.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
@@ -140,25 +136,24 @@ export const useSupplierStore = defineStore('supplier', () => {
         }
 
         setLoading(false);
-        listSupplier();
+        listProduct();
     };
 
     return {
-        suppliers,
-        supplier,
+        products,
+        product,
         loading,
-        hasSuppliers,
-        totalDocs,
         setSearchTerm,
-        inputValuesSelect,
+        hasProducts,
 
         totalPages,
         prevPage,
         nextPage,
+        totalDocs,
 
-        createOrUpdateSupplier,
-        listSupplier,
-        deleteSupplier,
-        getSupplier
+        createOrUpdateProduct,
+        listProduct,
+        getProduct,
+        deleteProduct
     }
 });

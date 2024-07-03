@@ -58,6 +58,13 @@ const routes = [
             name: 'list-product',
             beforeEnter: [isAuthenticatedGuard],
             component: () => import("@/modules/products/pages/ListProduct.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-product',
+            props: true,
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/products/pages/EditProduct.vue")
           }
         ]
       },
