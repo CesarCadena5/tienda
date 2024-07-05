@@ -4,17 +4,19 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-export const useCustomerStore = defineStore('customer', () => {
+export const useOrderStore = defineStore('order', () => {
     const router = useRouter();
-    const customers = ref([]);
-    const customer = ref({
+    const orders = ref([]);
+    const order = ref({
         _id: null,
-        name: '',
-        phoneNumber: ''
+        supplier: {},
+        totalPurchase: '',
+        statusOrder: '',
+        products: [],
     });
     const loading = ref(false);
     const searchTerm = ref('');
-    const pathUrlModule = 'customer';
+    const pathUrlModule = 'order';
 
     // pagination
     const nextPage = ref(null);
@@ -26,12 +28,12 @@ export const useCustomerStore = defineStore('customer', () => {
         loading.value = value;
     }
 
-    const setCustomers = (value) => {
-        customers.value = value;
+    const setOrders = (value) => {
+        orders.value = value;
     }
 
-    const setCustomer = (value) => {
-        customer.value = value;
+    const setOrder = (value) => {
+        order.value = value;
     }
 
     const setSearchTerm = (value) => {
@@ -55,23 +57,14 @@ export const useCustomerStore = defineStore('customer', () => {
         prevPage.value = value;
     }
 
-    const hasCustomers = computed(() => customers.value.length > 0);
-    const inputValuesSelect = computed(() => {
-        const options = customers.value.map(customer => ({
-            value: customer._id,
-            text: customer.name
-        }));
-
-        // options.unshift({ value: '', text: 'Selecciona' });
-        return options;
-    });
+    const hasOrders = computed(() => orders.value.length > 0);
 
     // methods
-    const createOrUpdateCustomer = async (values) => {
+    const createOrUpdateOrder = async (values) => {
         setLoading(true);
 
-        const finishPath = !customer.value._id ? '/create' : `/${customer.value._id}`;
-        const method = !customer.value._id ? 'POST' : 'PUT';
+        const finishPath = !order.value._id ? '/create' : `/${order.value._id}`;
+        const method = !order.value._id ? 'POST' : 'PUT';
 
         const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, values, method);
         const { icon: iconResponse, errors, msg, error } = await responseCreate.json();
@@ -85,26 +78,32 @@ export const useCustomerStore = defineStore('customer', () => {
             return;
         }
 
-        showErrorsAlert(iconResponse, router, msg, [], 'list-customer');
+        showErrorsAlert(iconResponse, router, msg, [], 'list-order');
     };
 
-    const listCustomer = async (page = 1, limit = 5) => {
+    const listOrder = async (page = 1, limit = 5) => {
         setLoading(true);
         const urlPath = `${pathUrlModule}/list?page=${page}&limit=${limit}&search=${searchTerm.value}`;
 
         const responseList = await getDataApi(urlPath, {}, 'GET');
         const { icon: iconResponse, data, error } = await responseList.json();
-
+        console.log(data)
         if (error) {
             setLoading(false);
             showErrorsAlert(iconResponse, null, error);
-            setCustomers([]);
+            setOrders([]);
             return;
         }
 
-        setCustomer({ _id: null, name: '', phoneNumber: '' });
+        setOrder({
+            _id: null,
+            supplier: {},
+            totalPurchase: '',
+            statusOrder: '',
+            products: []
+        });
 
-        setCustomers(data.docs);
+        setOrders(data.docs);
         setTotalPages(data.totalPages);
         setTotalDocs(data.totalDocs);
         setPrevPage(data.prevPage);
@@ -112,26 +111,26 @@ export const useCustomerStore = defineStore('customer', () => {
         setLoading(false);
     };
 
-    const getCustomer = async (id) => {
+    const getOrder = async (id) => {
         setLoading(true);
-        const responseGetCustomer = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
-        const { icon: iconResponse, errors, msg, data } = await responseGetCustomer.json();
+        const responseGetOrder = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
+        const { icon: iconResponse, errors, msg, data } = await responseGetOrder.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
-            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-customer');
+            showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-order');
             return;
         }
-
-        setCustomer(data);
+        console.log(data);
+        setOrder(data);
         showErrorsAlert(iconResponse, null, msg, [], '', true);
         setLoading(false);
     };
 
-    const deleteCustomer = async (id) => {
+    const deleteOrder = async (id) => {
         setLoading(true);
-        const responseDeleteCustomer = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
-        const { icon: iconResponse, errors } = await responseDeleteCustomer.json();
+        const responseDeleteOrder = await getDataApi(`${pathUrlModule}/${id}`, {}, 'DELETE');
+        const { icon: iconResponse, errors } = await responseDeleteOrder.json();
 
         if (errors && errors.length > 0) {
             setLoading(false);
@@ -140,25 +139,24 @@ export const useCustomerStore = defineStore('customer', () => {
         }
 
         setLoading(false);
-        listCustomer();
+        listOrder();
     };
 
     return {
-        customers,
-        customer,
+        orders,
+        order,
         loading,
-        hasCustomers,
-        totalDocs,
         setSearchTerm,
-        inputValuesSelect,
+        hasOrders,
 
         totalPages,
         prevPage,
         nextPage,
+        totalDocs,
 
-        createOrUpdateCustomer,
-        listCustomer,
-        deleteCustomer,
-        getCustomer
+        createOrUpdateOrder,
+        listOrder,
+        getOrder,
+        deleteOrder
     }
 });

@@ -29,7 +29,7 @@
                         </router-link>
                     </li>
                     <li class="list-group-item list-group-item-action list-group-item-info">
-                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                        <router-link :to="{name: 'list-order'}" class="d-flex align-items-center gap-2">
                             <img src="@/assets/svgs/orders.svg" alt="Icon Orders" class="icon-height">
                             Pedidos
                         </router-link>

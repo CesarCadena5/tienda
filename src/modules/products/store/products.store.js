@@ -61,6 +61,18 @@ export const useProductStore = defineStore('products', () => {
     }
 
     const hasProducts = computed(() => products.value.length > 0);
+    const inputValuesSelect = computed(() => {
+        const options = products.value.map(product => ({
+            value: product._id,
+            text: product.name,
+            quantity: 0,
+            priceUnit: product.salePrice,
+            id: product._id
+        }));
+
+        // options.unshift({ value: '', text: 'Selecciona' });
+        return options;
+    });
 
     // methods
     const createOrUpdateProduct = async (values) => {
@@ -145,6 +157,7 @@ export const useProductStore = defineStore('products', () => {
         loading,
         setSearchTerm,
         hasProducts,
+        inputValuesSelect,
 
         totalPages,
         prevPage,

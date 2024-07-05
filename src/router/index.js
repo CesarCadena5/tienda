@@ -166,6 +166,53 @@ const routes = [
             component: () => import("@/modules/customers/pages/EditCustomer.vue")
           }
         ]
+      },
+      {
+        path: 'orders',
+        name: 'orders',
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/orders/layout/OrderLayout.vue"),
+        children: [
+          {
+            path: '',
+            name: 'redirect-order',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-order' }
+          },
+          {
+            path: 'create',
+            name: 'create-order',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-order',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/orders/pages/ListOrder.vue")
+          },
+          {
+            path: 'view/:id',
+            name: 'view-order',
+            props: ({ params }) => {
+              return { id: params.id, view: true };
+            },
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-order',
+            props: true,
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+          }
+        ]
+      },
+      {
+        path: 'sales',
+        name: 'sales',
+        beforeEnter: [isAuthenticatedGuard],
       }
     ]
   },

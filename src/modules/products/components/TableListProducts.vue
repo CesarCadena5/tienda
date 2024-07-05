@@ -31,8 +31,8 @@
                 <td>${{ products.salePrice }}</td>
                 <td>{{ products.stock }}</td>
                 <td>{{ products.supplier.name }}</td>
-                <!-- <td>{{ formatDate(products.createdAt) }}</td> -->
-                <td>{{ formatDate(products.updatedAt) }}</td>
+                <td>{{ formatDate(products.createdAt) }}</td>
+                <!-- <td>{{ formatDate(products.updatedAt) }}</td> -->
                 <td>
                     <button class="btn btn-outline-info me-1 mt-1" @click="actionProduct(products._id, 'PUT')">
                         <img src="@/assets/svgs/edit.svg" alt="Icon Edit" class="height-icon">

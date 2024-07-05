@@ -75,6 +75,7 @@ const formSchema = computed(() => {
                 name: 'category',
                 as: 'select',
                 class: 'col-12 col-sm-6',
+                classInput: 'form-select',
                 options: categoriesStore.inputValuesSelect,
                 rules: Yup.string().required('Campo requerido.')
             },
@@ -83,6 +84,7 @@ const formSchema = computed(() => {
                 name: 'supplier',
                 as: 'select',
                 class: 'col-12',
+                classInput: 'form-select',
                 options: suppliersStore.inputValuesSelect,
                 rules: Yup.string().required('Campo requerido.')
             },
