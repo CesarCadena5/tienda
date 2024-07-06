@@ -1,6 +1,6 @@
 <template>
-    <section class="row d-flex justify-content-center">
-        <Loading v-if="producsStore.loading"/>
+    <section class="row d-flex justify-content-center position-relative">
+        <Loading v-if="producsStore.loading" class="h-100"/>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 shadow p-3">
             <div class="col-12">
                 <h4 class="text-center">Nuevo Producto</h4>

@@ -55,10 +55,13 @@
                     </span>
                 </div>
                 <div class="alert alert-info w-45 position-relative" role="alert">
-                    <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                    <router-link :to="{name: 'list-sale'}" class="d-flex align-items-center gap-2">
                         <img src="@/assets/svgs/sale.svg" alt="Icon Sales" class="icon-height">
                         Ventas
                     </router-link>
+                    <span class="position-absolute top-0 start-100 bg-info translate-middle badge rounded-pill bg-danger">
+                        {{salesStore.totalDocs}}
+                    </span>
                 </div>
             </div>
         </div>
@@ -73,8 +76,10 @@ import { useSupplierStore } from '@/modules/suppliers/store/suppliers.store';
 import { useCustomerStore } from '@/modules/customers/store/customers.store';
 import { useProductStore } from '@/modules/products/store/products.store';
 import { useOrderStore } from '@/modules/orders/store/orders.store';
+import { useSaleStore } from '@/modules/sales/store/sales.store';
 
 const authStore = useAuthStore();
+const salesStore = useSaleStore();
 const ordersStore = useOrderStore();
 const productsStore = useProductStore();
 const suppliersStore = useSupplierStore();
@@ -82,6 +87,7 @@ const customersStore = useCustomerStore();
 const categoriesStore = useCategoriesStore();
 
 onMounted(() => {
+    salesStore.listSale();
     ordersStore.listOrder();
     productsStore.listProduct();
     suppliersStore.listSupplier();

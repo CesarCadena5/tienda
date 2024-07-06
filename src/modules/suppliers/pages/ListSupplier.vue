@@ -1,6 +1,6 @@
 <template>
-    <section class="row d-flex justify-content-center mt-2">
-        <Loading v-if="suppliersStore.loading"/>
+    <section class="row d-flex justify-content-center mt-2 position-relative">
+        <Loading v-if="suppliersStore.loading" class="h-100"/>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 shadow-lg py-2 rounded">
             <div class="col-12 mb-3">
                 <h4 class="text-center">Lista de Proveedores</h4>

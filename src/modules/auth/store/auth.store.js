@@ -74,6 +74,19 @@ export const useAuthStore = defineStore('auth', () => {
         setLoading(false);
     }
 
+    const logout = async () => {
+        setLoading(true);
+
+        const responseLogout = await getDataApi('auth/logout');
+        const { msg } = await responseLogout.json();
+
+        setNameUser('');
+        setMsgAuth('');
+        setStatusAuth(false);
+        router.replace({ name: 'login' });
+        setLoading(false);
+    }
+
     return {
         statusAuth,
         loading,
@@ -83,6 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         // methods
         loginOrSignup,
+        logout,
         validateAuthUser
     }
 });

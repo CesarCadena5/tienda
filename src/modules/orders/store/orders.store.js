@@ -87,7 +87,7 @@ export const useOrderStore = defineStore('order', () => {
 
         const responseList = await getDataApi(urlPath, {}, 'GET');
         const { icon: iconResponse, data, error } = await responseList.json();
-        console.log(data)
+
         if (error) {
             setLoading(false);
             showErrorsAlert(iconResponse, null, error);

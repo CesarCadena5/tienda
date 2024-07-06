@@ -62,7 +62,7 @@ export const useCustomerStore = defineStore('customer', () => {
             text: customer.name
         }));
 
-        // options.unshift({ value: '', text: 'Selecciona' });
+        options.unshift({ value: '', text: 'Selecciona' });
         return options;
     });
 

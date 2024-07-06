@@ -23,7 +23,7 @@
                         </router-link>
                     </li>
                     <li class="list-group-item list-group-item-action list-group-item-info">
-                        <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2">
+                        <router-link :to="{name: 'list-sale'}" class="d-flex align-items-center gap-2">
                             <img src="@/assets/svgs/sale.svg" alt="Icon Sales" class="icon-height">
                             Ventas
                         </router-link>
@@ -60,17 +60,17 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2 dropdown-item">
+                            <router-link disabled readonly :to="{name: 'home'}" class="d-flex align-items-center gap-2 dropdown-item">
                                 <img src="@/assets/svgs/user-edit.svg" alt="User Edit" class="icon-height">
                                 Actualizar
                             </router-link>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <router-link :to="{name: 'home'}" class="d-flex align-items-center gap-2 dropdown-item">
+                            <button class="d-flex align-items-center gap-2 dropdown-item" @click="handleLogout">
                                 <img src="@/assets/svgs/logout-icon.svg" alt="Icon logout" class="icon-height">
                                 Salir
-                            </router-link>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -83,6 +83,10 @@
 import { useAuthStore } from '@/modules/auth/store/auth.store';
 
 const authStore = useAuthStore();
+
+const handleLogout = () => {
+    authStore.logout();
+};
 </script>
 
 <style scoped>

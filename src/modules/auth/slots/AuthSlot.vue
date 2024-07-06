@@ -1,6 +1,6 @@
 <template>
-    <div class="row align-items-center justify-content-around min-vh-100 px-2">
-        <Loading v-if="authStore.loading"/>
+    <div class="row align-items-center justify-content-around min-vh-100 px-2 position-relative">
+        <Loading v-if="authStore.loading" class="h-100"/>
         <div class="col-12 col-lg-6 d-lg-block d-none">
             <img :src="imgSrc" alt="Image login" class="img-fluid p-2">
         </div>

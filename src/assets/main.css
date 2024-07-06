@@ -9,3 +9,23 @@
 .height-icon {
     height: 25px;
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #6c757d;
+    border-radius: .8rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6c757d;
+}

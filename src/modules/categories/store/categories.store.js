@@ -65,13 +65,13 @@ export const useCategoriesStore = defineStore('categories', () => {
         return options;
     });
 
-    const createOrUpdateCategory = async () => {
+    const createOrUpdateCategory = async (values) => {
         setLoading(true);
-        const data = { name: category.value.name };
+
         const finishPath = !category.value._id ? '/create' : `/${category.value._id}`;
         const method = !category.value._id ? 'POST' : 'PUT';
 
-        const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, data, method);
+        const responseCreate = await getDataApi(`${pathUrlModule}${finishPath}`, values, method);
         const { icon: iconResponse, errors, msg, error } = await responseCreate.json();
 
         setLoading(false);
@@ -88,6 +88,7 @@ export const useCategoriesStore = defineStore('categories', () => {
 
     const listCategory = async (page = 1, limit = 5) => {
         setLoading(true);
+
         const urlPath = `${pathUrlModule}/list?page=${page}&limit=${limit}&search=${searchTerm.value}`;
 
         const responseList = await getDataApi(urlPath, {}, 'GET');
@@ -102,7 +103,6 @@ export const useCategoriesStore = defineStore('categories', () => {
 
         setCategory({ _id: null, name: '' });
 
-        // showErrorsAlert(iconResponse, null, msg, [], '', true);
         setCategories(data.docs);
         setTotalPages(data.totalPages);
         setTotalDocs(data.totalDocs);
@@ -121,9 +121,9 @@ export const useCategoriesStore = defineStore('categories', () => {
             showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-category');
             return;
         }
-
-        showErrorsAlert(iconResponse, null, msg, [], '', true);
+        console.log(data);
         setCategory(data);
+        showErrorsAlert(iconResponse, null, msg, [], '', true);
         setLoading(false);
     };
 

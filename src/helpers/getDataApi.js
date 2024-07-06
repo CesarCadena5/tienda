@@ -4,7 +4,7 @@ export const getDataApi = async (urlPath, data = {}, method = 'POST') => {
         const options = {
             method,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             credentials: 'include',
             body: bodyData

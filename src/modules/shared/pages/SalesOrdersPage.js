@@ -1,10 +1,12 @@
-import { useOrderStore } from '../store/orders.store';
 import Loading from '@/modules/shared/components/Loading.vue';
+
 import { useSaleStore } from '@/modules/sales/store/sales.store';
-import { useSupplierStore } from '../../suppliers/store/suppliers.store';
+import { useOrderStore } from '@/modules/orders/store/orders.store';
 import { useProductStore } from '@/modules/products/store/products.store';
-import { Field, useForm, useFieldArray, ErrorMessage } from 'vee-validate';
+import { useSupplierStore } from '@/modules/suppliers/store/suppliers.store';
 import { useCustomerStore } from '@/modules/customers/store/customers.store';
+
+import { Field, useForm, useFieldArray, ErrorMessage } from 'vee-validate';
 import { onMounted, ref, nextTick, computed, defineComponent, watch } from 'vue';
 
 export default defineComponent({
@@ -32,7 +34,7 @@ export default defineComponent({
         Loading
     },
     setup: (props) => {
-        const totalPurchase = ref(0);
+        const totalEvent = ref(0);
         const debounceTimeout = ref();
 
         const productsStore = useProductStore();
@@ -52,6 +54,9 @@ export default defineComponent({
             }
         });
 
+        const nameInputTotal = computed(() => props.typeStorePerson === 'supplier' ? 'totalPurchase' : 'totalSale');
+        const nameInputStatus = computed(() => props.typeStorePerson === 'supplier' ? 'statusOrder' : 'statusSale');
+
         const { handleSubmit, resetForm } = useForm({});
         const { remove, push, fields, update } = useFieldArray('products');
 
@@ -60,9 +65,7 @@ export default defineComponent({
         });
 
         const validateTypePerson = value => value ? true : 'Campo requerido.';
-
         const validateStatusOrder = value => value ? true : 'El estado del evento es requerido.';
-
         const validateTotal = value => value ? true : 'Debes agregar productos.';
 
         const setProductSelected = ({ target }, index) => {
@@ -88,7 +91,7 @@ export default defineComponent({
             });
 
             await nextTick();
-            totalPurchase.value = fields.value.reduce((acc, cur) => acc + cur.value.totalPrice, 0);
+            totalEvent.value = fields.value.reduce((acc, cur) => acc + cur.value.totalPrice, 0);
         }
 
         const titleTypePerson = computed(() => {
@@ -108,8 +111,8 @@ export default defineComponent({
                         values: {
                             products: storeModule[props.typeStoreModule].products,
                             [titleTypePerson.value]: storeModule[props.typeStoreModule][props.typeStorePerson]._id,
-                            totalPurchase: storeModule[props.typeStoreModule].totalPurchase,
-                            statusOrder: storeModule[props.typeStoreModule].statusOrder,
+                            [nameInputTotal.value]: storeModule[props.typeStoreModule][nameInputTotal.value],
+                            [nameInputStatus.value]: storeModule[props.typeStoreModule][nameInputStatus.value],
                             additionalNote: props.typeStoreModule === 'sale' ? storeModule[props.typeStoreModule].additionalNote : null
                         }
                     });
@@ -126,12 +129,14 @@ export default defineComponent({
             storeModule,
             onSubmit,
             titleTypePerson,
+            nameInputTotal,
+            nameInputStatus,
             handleChangeQuantity,
             setProductSelected,
-            totalPurchase,
             validateStatusOrder,
             validateTypePerson,
             validateTotal,
+            totalEvent,
             remove,
             push,
             searchTerm,

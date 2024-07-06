@@ -1,6 +1,6 @@
 <template>
-    <section class="row d-flex justify-content-center">
-        <Loading v-if="storeModule.loading" />
+    <section class="row d-flex justify-content-center position-relative">
+        <Loading v-if="storeModule.loading" class="h-100" />
         <div class="col-12 col-lg-10 shadow p-3 mt-3">
             <form @submit="onSubmit">
                 <div class="mb-3">
@@ -18,22 +18,22 @@
                 </div>
                 <div class="mb-3" v-if="typeStoreModule === 'sale'">
                     <label for="additionalNote" class="form-label">Nota Adicional</label>
-                    <Field name="additionalNote" as="textarea" class="form-control" id="additionalNote" rows="3"/>
+                    <Field name="additionalNote" as="textarea" class="form-control" :disabled="view" id="additionalNote" rows="2"/>
                 </div>
                 <div class="mb-3">
-                    <label for="totalPurchase" class="form-label">Total</label>
-                    <Field type="number" name="totalPurchase" :rules="validateTotal" v-model="totalPurchase" readonly disabled class="form-control" id="totalPurchase" placeholder="0"/>
-                    <ErrorMessage name="totalPurchase"/>
+                    <label :for="nameInputTotal" class="form-label">Total</label>
+                    <Field type="number" :name="nameInputTotal" :rules="validateTotal" v-model="totalEvent" readonly disabled class="form-control" :id="nameInputTotal" placeholder="0"/>
+                    <ErrorMessage :name="nameInputTotal"/>
                 </div>
                 <div class="mb-3">
-                    <label for="statusOrder" class="form-label">Estado del Pedido</label>
-                    <Field name="statusOrder" as="select" class="form-select" :disabled="view" :rules="validateStatusOrder">
+                    <label :for="nameInputStatus" class="form-label">Estado {{typeStorePerson === 'supplier' ?  'del Pedido' : 'de la Venta'}}</label>
+                    <Field :name="nameInputStatus" as="select" class="form-select" :disabled="view" :rules="validateStatusOrder">
                         <option value="">Selecciona</option>
                         <option value="pagada">Pagado</option>
                         <option value="cancelada">Cancelado</option>
                         <option value="pendiente">Pendiente</option>
                     </Field>
-                    <ErrorMessage name="statusOrder"/>
+                    <ErrorMessage :name="nameInputStatus"/>
                 </div>
                 <div class="mb-3">
                     <div v-for="(field, index) in fields" :key="field.key">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success mt-2" :disabled="view" type="button" @click="push({ productId: '', quantity: 0, priceUnit: 0, totalPurchase: 0  })">
+                    <button class="btn btn-success mt-2" :disabled="view" type="button" @click="push({ productId: '', quantity: 0, priceUnit: 0, totalEvent: 0  })">
                         Producto
                         <img src="@/assets/svgs/add-product.svg" alt="Add Icon" class="height-icon">
                     </button>
@@ -85,5 +85,5 @@
         </div>
     </section>
 </template>
-<script src="./CreateOrder.js">
+<script src="./SalesOrdersPage.js">
 </script>

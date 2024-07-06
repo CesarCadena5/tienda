@@ -183,7 +183,7 @@ const routes = [
             path: 'create',
             name: 'create-order',
             beforeEnter: [isAuthenticatedGuard],
-            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
           },
           {
             path: 'list',
@@ -198,14 +198,14 @@ const routes = [
               return { id: params.id, view: true };
             },
             beforeEnter: [isAuthenticatedGuard],
-            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
           },
           {
             path: ':id',
             name: 'edit-order',
             props: true,
             beforeEnter: [isAuthenticatedGuard],
-            component: () => import("@/modules/orders/pages/CreateOrder.vue")
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
           }
         ]
       },
@@ -213,6 +213,48 @@ const routes = [
         path: 'sales',
         name: 'sales',
         beforeEnter: [isAuthenticatedGuard],
+        component: () => import("@/modules/sales/layouts/SaleLayout.vue"),
+        children: [
+          {
+            path: '',
+            name: 'redirect-sale',
+            beforeEnter: [isAuthenticatedGuard],
+            redirect: { name: 'list-sale' }
+          },
+          {
+            path: 'create',
+            name: 'create-sale',
+            props: () => {
+              return { typeStorePerson: 'customer', typeStoreModule: 'sale' }
+            },
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
+          },
+          {
+            path: 'list',
+            name: 'list-sale',
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/sales/pages/ListSale.vue")
+          },
+          {
+            path: 'view/:id',
+            name: 'view-sale',
+            props: ({ params }) => {
+              return { id: params.id, view: true, typeStorePerson: 'customer', typeStoreModule: 'sale' };
+            },
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
+          },
+          {
+            path: ':id',
+            name: 'edit-sale',
+            props: ({ params }) => {
+              return { id: params.id, typeStorePerson: 'customer', typeStoreModule: 'sale' };
+            },
+            beforeEnter: [isAuthenticatedGuard],
+            component: () => import("@/modules/shared/pages/SalesOrdersPage.vue")
+          }
+        ]
       }
     ]
   },
