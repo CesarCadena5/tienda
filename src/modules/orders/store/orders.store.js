@@ -60,7 +60,7 @@ export const useOrderStore = defineStore('order', () => {
     const hasOrders = computed(() => orders.value.length > 0);
 
     // methods
-    const createOrUpdateOrder = async (values) => {
+    const createOrUpdate = async (values) => {
         setLoading(true);
 
         const finishPath = !order.value._id ? '/create' : `/${order.value._id}`;
@@ -111,7 +111,7 @@ export const useOrderStore = defineStore('order', () => {
         setLoading(false);
     };
 
-    const getOrder = async (id) => {
+    const getItem = async (id) => {
         setLoading(true);
         const responseGetOrder = await getDataApi(`${pathUrlModule}/${id}`, {}, 'GET');
         const { icon: iconResponse, errors, msg, data } = await responseGetOrder.json();
@@ -121,7 +121,7 @@ export const useOrderStore = defineStore('order', () => {
             showErrorsAlert(iconResponse, router, 'Error de Búsqueda', errors, 'list-order');
             return;
         }
-        console.log(data);
+
         setOrder(data);
         showErrorsAlert(iconResponse, null, msg, [], '', true);
         setLoading(false);
@@ -154,9 +154,9 @@ export const useOrderStore = defineStore('order', () => {
         nextPage,
         totalDocs,
 
-        createOrUpdateOrder,
+        createOrUpdate,
         listOrder,
-        getOrder,
+        getItem,
         deleteOrder
     }
 });

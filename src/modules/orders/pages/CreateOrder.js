@@ -1,8 +1,10 @@
 import { useOrderStore } from '../store/orders.store';
 import Loading from '@/modules/shared/components/Loading.vue';
+import { useSaleStore } from '@/modules/sales/store/sales.store';
 import { useSupplierStore } from '../../suppliers/store/suppliers.store';
 import { useProductStore } from '@/modules/products/store/products.store';
 import { Field, useForm, useFieldArray, ErrorMessage } from 'vee-validate';
+import { useCustomerStore } from '@/modules/customers/store/customers.store';
 import { onMounted, ref, nextTick, computed, defineComponent, watch } from 'vue';
 
 export default defineComponent({
@@ -14,6 +16,14 @@ export default defineComponent({
         view: {
             type: Boolean,
             default: false
+        },
+        typeStorePerson: {
+            type: String,
+            default: 'supplier'
+        },
+        typeStoreModule: {
+            type: String,
+            default: 'order'
         }
     },
     components: {
@@ -23,10 +33,12 @@ export default defineComponent({
     },
     setup: (props) => {
         const totalPurchase = ref(0);
-        const productsStore = useProductStore();
-        const suppliersStore = useSupplierStore();
-        const ordersStore = useOrderStore();
         const debounceTimeout = ref();
+
+        const productsStore = useProductStore();
+
+        const typePersonStore = props.typeStorePerson === 'supplier' ? useSupplierStore() : useCustomerStore();
+        const storeModule = props.typeStoreModule === 'order' ? useOrderStore() : useSaleStore();
 
         const searchTerm = computed({
             get() { },
@@ -44,29 +56,14 @@ export default defineComponent({
         const { remove, push, fields, update } = useFieldArray('products');
 
         const onSubmit = handleSubmit(values => {
-            ordersStore.createOrUpdateOrder(values);
+            storeModule.createOrUpdate(values);
         });
 
-        const validateSupplier = (value) => {
-            if (!value) {
-                return 'El proveedor es requerido.';
-            }
-            return true;
-        };
+        const validateTypePerson = value => value ? true : 'Campo requerido.';
 
-        const validateStatusOrder = (value) => {
-            if (!value) {
-                return 'El estado del pedido es requerido.';
-            }
-            return true;
-        };
+        const validateStatusOrder = value => value ? true : 'El estado del evento es requerido.';
 
-        const validateTotal = (value) => {
-            if (!value) {
-                return 'Debe agregar productos.';
-            }
-            return true;
-        }
+        const validateTotal = value => value ? true : 'Debes agregar productos.';
 
         const setProductSelected = ({ target }, index) => {
             const selectedProduct = productsStore.inputValuesSelect.find(product => product.text === target.value);
@@ -91,26 +88,29 @@ export default defineComponent({
             });
 
             await nextTick();
-            totalPurchase.value = fields.value.reduce((acc, cur) => {
-                return acc + cur.value.totalPrice;
-            }, 0);
+            totalPurchase.value = fields.value.reduce((acc, cur) => acc + cur.value.totalPrice, 0);
         }
 
+        const titleTypePerson = computed(() => {
+            return props.typeStorePerson === 'supplier' ? 'supplier' : 'customer';
+        });
+
         onMounted(() => {
-            suppliersStore.listSupplier();
+            props.typeStorePerson === 'supplier' ? typePersonStore.listSupplier() : typePersonStore.listCustomer();
         });
 
         watch(
             () => props.id,
             async (newId) => {
                 if (newId) {
-                    await ordersStore.getOrder(newId);
+                    await storeModule.getItem(newId);
                     resetForm({
                         values: {
-                            products: ordersStore.order.products,
-                            supplier: ordersStore.order.supplier._id,
-                            totalPurchase: ordersStore.order.totalPurchase,
-                            statusOrder: ordersStore.order.statusOrder
+                            products: storeModule[props.typeStoreModule].products,
+                            [titleTypePerson.value]: storeModule[props.typeStoreModule][props.typeStorePerson]._id,
+                            totalPurchase: storeModule[props.typeStoreModule].totalPurchase,
+                            statusOrder: storeModule[props.typeStoreModule].statusOrder,
+                            additionalNote: props.typeStoreModule === 'sale' ? storeModule[props.typeStoreModule].additionalNote : null
                         }
                     });
                 }
@@ -122,14 +122,15 @@ export default defineComponent({
 
         return {
             productsStore,
-            suppliersStore,
-            ordersStore,
+            typePersonStore,
+            storeModule,
             onSubmit,
+            titleTypePerson,
             handleChangeQuantity,
             setProductSelected,
             totalPurchase,
             validateStatusOrder,
-            validateSupplier,
+            validateTypePerson,
             validateTotal,
             remove,
             push,

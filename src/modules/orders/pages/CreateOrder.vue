@@ -1,18 +1,24 @@
 <template>
     <section class="row d-flex justify-content-center">
-        <Loading v-if="ordersStore.loading" />
+        <Loading v-if="storeModule.loading" />
         <div class="col-12 col-lg-10 shadow p-3 mt-3">
             <form @submit="onSubmit">
                 <div class="mb-3">
-                    <label for="supplier" class="form-label">Proveedor</label>
-                    <Field name="supplier" as="select" class="form-select" :disabled="view" :rules="validateSupplier">
+                    <label :for="titleTypePerson" class="form-label">
+                        {{typeStorePerson === 'supplier' ?  'Proveedor' : 'Cliente'}}
+                    </label>
+                    <Field :name="titleTypePerson" as="select" class="form-select" :disabled="view" :rules="validateTypePerson">
                         <option 
-                            v-for="supplier in suppliersStore.inputValuesSelect"
-                            :key="supplier.value" :value="supplier.value">
-                                {{ supplier.text }}
+                            v-for="typePerson in typePersonStore.inputValuesSelect"
+                            :key="typePerson.value" :value="typePerson.value">
+                                {{ typePerson.text }}
                         </option>
                     </Field>
-                    <ErrorMessage name="supplier"/>
+                    <ErrorMessage :name="titleTypePerson"/>
+                </div>
+                <div class="mb-3" v-if="typeStoreModule === 'sale'">
+                    <label for="additionalNote" class="form-label">Nota Adicional</label>
+                    <Field name="additionalNote" as="textarea" class="form-control" id="additionalNote" rows="3"/>
                 </div>
                 <div class="mb-3">
                     <label for="totalPurchase" class="form-label">Total</label>

@@ -67,6 +67,6 @@ const actionOrder = (id, method) => {
         return;
     }
 
-    // showDeleteAlert(ordersStore.deleteProduct, id);
+    showDeleteAlert(ordersStore.deleteOrder, id);
 };
 </script>
